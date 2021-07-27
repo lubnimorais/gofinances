@@ -10,9 +10,10 @@ import {
 } from '@expo-google-fonts/poppins';
 
 import { ThemeProvider } from 'styled-components/native';
-import { Dashboard } from './src/screens/Dashboard';
-
 import theme from './src/global/styles/theme';
+
+import { Dashboard } from './src/screens/Dashboard';
+import { Register } from './src/screens/Register';
 
 const App: React.FC = () => {
   const [fontsLoaded] = useFonts({
@@ -32,7 +33,7 @@ const App: React.FC = () => {
           barStyle={Platform.OS === 'ios' ? 'dark-content' : 'light-content'}
           backgroundColor={theme.colors.primary}
         />
-        <Dashboard />
+        <Register />
       </ThemeProvider>
     </SafeAreaView>
   );
