@@ -14,6 +14,7 @@ import theme from './src/global/styles/theme';
 
 import { Dashboard } from './src/screens/Dashboard';
 import { Register } from './src/screens/Register';
+import { CategorySelect } from './src/screens/CategorySelect';
 
 const App: React.FC = () => {
   const [fontsLoaded] = useFonts({
@@ -33,7 +34,7 @@ const App: React.FC = () => {
           barStyle={Platform.OS === 'ios' ? 'dark-content' : 'light-content'}
           backgroundColor={theme.colors.primary}
         />
-        <Register />
+        <CategorySelect />
       </ThemeProvider>
     </SafeAreaView>
   );

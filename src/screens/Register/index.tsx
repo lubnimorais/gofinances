@@ -3,6 +3,7 @@ import React, { useState, useCallback } from 'react';
 import { Button } from '../../components/Form/Button';
 import { Input } from '../../components/Form/Input';
 import { TransactionTypeButton } from '../../components/Form/TransactionTypeButton';
+import { CategorySelect } from '../../components/Form/CategorySelect';
 
 import {
   Container,
@@ -46,6 +47,8 @@ const Register: React.FC = () => {
               onPress={() => handleTransactionTypeSelect('down')}
             />
           </TransactionType>
+
+          <CategorySelect title="Category" />
         </Fields>
 
         <Button title="Enviar" />
