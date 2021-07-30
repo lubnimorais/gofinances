@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { categories } from '../../utils/categories';
 
 import { Button } from '../../components/Form/Button';
@@ -7,7 +7,7 @@ import {
   Container,
   Header,
   Title,
-  Lista,
+  ListCategories,
   Category,
   Icon,
   Name,
@@ -21,7 +21,7 @@ interface ICategory {
 }
 
 interface IProps {
-  category: string;
+  category: ICategory;
   setCategory: (category: ICategory) => void;
   closeSelectCategory: () => void;
 }
@@ -31,17 +31,27 @@ const CategorySelect: React.FC<IProps> = ({
   setCategory,
   closeSelectCategory,
 }) => {
+  const handleCategorySelect = useCallback(
+    (categorySelect: ICategory) => {
+      setCategory(categorySelect);
+    },
+    [setCategory],
+  );
+
   return (
     <Container>
       <Header>
         <Title>Categoria</Title>
       </Header>
 
-      <Lista
+      <ListCategories
         data={categories}
         keyExtractor={item => item.key}
         renderItem={({ item }) => (
-          <Category>
+          <Category
+            onPress={() => handleCategorySelect(item)}
+            isActive={category.key === item.key}
+          >
             <Icon name={item.icon} />
             <Name>{item.name}</Name>
           </Category>
@@ -50,7 +60,11 @@ const CategorySelect: React.FC<IProps> = ({
       />
 
       <Footer>
-        <Button title="Selecionar" />
+        <Button
+          title="Selecionar"
+          onPress={closeSelectCategory}
+          activeOpacity={0.7}
+        />
       </Footer>
     </Container>
   );

@@ -34,7 +34,7 @@ const App: React.FC = () => {
           barStyle={Platform.OS === 'ios' ? 'dark-content' : 'light-content'}
           backgroundColor={theme.colors.primary}
         />
-        <CategorySelect />
+        <Register />
       </ThemeProvider>
     </SafeAreaView>
   );
