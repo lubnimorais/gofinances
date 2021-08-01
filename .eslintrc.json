@@ -36,6 +36,7 @@
       "react/jsx-props-no-spreading": "off",
       "consistent-return": "off",
       "prefer-spread": "off",
+      "import/no-duplicates": "off",
       "react/jsx-filename-extension": [
         1,
         {

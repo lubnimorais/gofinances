@@ -3,7 +3,7 @@ import 'intl';
 import 'intl/locale-data/jsonp/pt-BR';
 
 import React from 'react';
-import { SafeAreaView, StatusBar, Platform } from 'react-native';
+import { StatusBar, Platform } from 'react-native';
 import AppLoading from 'expo-app-loading';
 import { NavigationContainer } from '@react-navigation/native';
 
@@ -31,17 +31,17 @@ const App: React.FC = () => {
   }
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
-      <ThemeProvider theme={theme}>
-        <StatusBar
-          barStyle={Platform.OS === 'ios' ? 'dark-content' : 'light-content'}
-          backgroundColor={theme.colors.primary}
-        />
-        <NavigationContainer>
-          <AppRoutes />
-        </NavigationContainer>
-      </ThemeProvider>
-    </SafeAreaView>
+    // <SafeAreaView style={{ flex: 1 }}>
+    <ThemeProvider theme={theme}>
+      <StatusBar
+        barStyle={Platform.OS === 'ios' ? 'light-content' : 'light-content'}
+        backgroundColor={theme.colors.primary}
+      />
+      <NavigationContainer>
+        <AppRoutes />
+      </NavigationContainer>
+    </ThemeProvider>
+    // </SafeAreaView>
   );
 };
 
