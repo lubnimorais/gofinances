@@ -1,5 +1,6 @@
 import styled from 'styled-components/native';
 import { Platform, FlatList } from 'react-native';
+import { BorderlessButton } from 'react-native-gesture-handler';
 import { RFPercentage, RFValue } from 'react-native-responsive-fontsize';
 import { Feather } from '@expo/vector-icons';
 import {
@@ -7,23 +8,24 @@ import {
   getBottomSpace,
 } from 'react-native-iphone-x-helper';
 
-interface ICategory {
-  name: string;
-  icon: string;
-}
-
 interface ITransactionCardProps {
   id: string;
   type: 'positive' | 'negative';
-  title: string;
+  name: string;
   amount: string;
-  category: ICategory;
+  category: string;
   date: string;
 }
 
 export const Container = styled.View`
   flex: 1;
   background-color: ${({ theme }) => theme.colors.background};
+`;
+
+export const LoadContainer = styled.View`
+  flex: 1;
+  justify-content: center;
+  align-items: center;
 `;
 
 export const Header = styled.View`
@@ -75,6 +77,8 @@ export const UserName = styled.Text`
   font-family: ${({ theme }) => theme.fonts.medium};
   margin-top: ${RFValue(-7)}px;
 `;
+
+export const LogoutButton = styled(BorderlessButton)``;
 
 export const Icon = styled(Feather)`
   color: ${({ theme }) => theme.colors.secondary};

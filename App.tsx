@@ -1,6 +1,11 @@
+import 'react-native-gesture-handler';
+import 'intl';
+import 'intl/locale-data/jsonp/pt-BR';
+
 import React from 'react';
 import { SafeAreaView, StatusBar, Platform } from 'react-native';
 import AppLoading from 'expo-app-loading';
+import { NavigationContainer } from '@react-navigation/native';
 
 import {
   useFonts,
@@ -12,9 +17,7 @@ import {
 import { ThemeProvider } from 'styled-components/native';
 import theme from './src/global/styles/theme';
 
-import { Dashboard } from './src/screens/Dashboard';
-import { Register } from './src/screens/Register';
-import { CategorySelect } from './src/screens/CategorySelect';
+import { AppRoutes } from './src/routes/app.routes';
 
 const App: React.FC = () => {
   const [fontsLoaded] = useFonts({
@@ -34,7 +37,9 @@ const App: React.FC = () => {
           barStyle={Platform.OS === 'ios' ? 'dark-content' : 'light-content'}
           backgroundColor={theme.colors.primary}
         />
-        <Register />
+        <NavigationContainer>
+          <AppRoutes />
+        </NavigationContainer>
       </ThemeProvider>
     </SafeAreaView>
   );
