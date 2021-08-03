@@ -17,7 +17,11 @@ import {
 import { ThemeProvider } from 'styled-components/native';
 import theme from './src/global/styles/theme';
 
+import { AuthProvider } from './src/hooks/auth';
+
 import { AppRoutes } from './src/routes/app.routes';
+
+import { SignIn } from './src/screens/SignIn';
 
 const App: React.FC = () => {
   const [fontsLoaded] = useFonts({
@@ -38,7 +42,9 @@ const App: React.FC = () => {
         backgroundColor={theme.colors.primary}
       />
       <NavigationContainer>
-        <AppRoutes />
+        <AuthProvider>
+          <SignIn />
+        </AuthProvider>
       </NavigationContainer>
     </ThemeProvider>
     // </SafeAreaView>
