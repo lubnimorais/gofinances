@@ -1,12 +1,29 @@
-import React, { createContext, useContext, useCallback } from 'react';
+import React, { createContext, useContext, useCallback, useState } from 'react';
 
 import * as AuthSession from 'expo-auth-session';
+
+const { CLIENT_ID } = process.env;
+const { REDIRECT_URI } = process.env;
 
 interface IUser {
   id: string;
   name: string;
   email: string;
   photo?: string;
+}
+
+interface IAuthorizationResponse {
+  params: {
+    access_token: string;
+  };
+  type: string;
+}
+
+interface IUserInfoGoogle {
+  id: string;
+  given_name: string;
+  email: string;
+  picture: string;
 }
 
 interface IAuthContextData {
@@ -17,24 +34,33 @@ interface IAuthContextData {
 const AuthContext = createContext<IAuthContextData>({} as IAuthContextData);
 
 const AuthProvider: React.FC = ({ children }) => {
-  const user = {
-    id: '121212',
-    name: 'Lubni Morais',
-    email: 'lubni.morais@gmail.com',
-  };
+  const [user, setUser] = useState<IUser>({} as IUser);
 
   const signInWithGoogle = useCallback(async () => {
     try {
-      const CLIENT_ID =
-        '872108538494-f30f0j2ht0j89v8h8dge8rbprgq59isg.apps.googleusercontent.com';
-      const REDIRECT_URI = 'https://auth.expo.io/@lubnimorais/gofinances';
       const RESPONSE_TYPE = 'token';
       const SCOPE = encodeURI('profile email');
 
       const authUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&response_type=${RESPONSE_TYPE}&scope=${SCOPE}`;
 
-      const response = await AuthSession.startAsync({ authUrl });
-      console.log(response);
+      const { params, type } = (await AuthSession.startAsync({
+        authUrl,
+      })) as IAuthorizationResponse;
+
+      if (type === 'success') {
+        const response = await fetch(
+          `https://www.googleapis.com/oauth2/v1/userinfo?alt=json&access_token=${params.access_token}`,
+        );
+
+        const userInfo = (await response.json()) as IUserInfoGoogle;
+
+        setUser({
+          id: userInfo.id,
+          name: userInfo.given_name,
+          email: userInfo.email,
+          photo: userInfo.picture,
+        });
+      }
     } catch (error) {
       console.log(error);
       throw new Error(error);
