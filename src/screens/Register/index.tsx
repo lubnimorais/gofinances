@@ -8,6 +8,8 @@ import { useForm } from 'react-hook-form';
 import * as Yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 
+import { useAuth } from '../../hooks/auth';
+
 import { Button } from '../../components/Form/Button';
 import { InputForm } from '../../components/Form/InputForm';
 import { TransactionTypeButton } from '../../components/Form/TransactionTypeButton';
@@ -43,6 +45,8 @@ const schema = Yup.object().shape({
 });
 
 const Register: React.FC = () => {
+  const { user } = useAuth();
+
   const navigation = useNavigation();
 
   const [transactionType, setTransactionType] = useState('');
@@ -90,7 +94,7 @@ const Register: React.FC = () => {
       };
 
       try {
-        const dataKey = '@gofinances:transactions';
+        const dataKey = `@gofinances:transactions_user:${user.id}`;
 
         const response = await AsyncStorage.getItem(dataKey);
         const currentData = response ? JSON.parse(response) : [];

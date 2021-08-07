@@ -5,6 +5,8 @@ import { useTheme } from 'styled-components';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
+import { useAuth } from '../../hooks/auth';
+
 import { HighlightCard } from '../../components/HighlightCard';
 import { TransactionCard } from '../../components/TransactionCard';
 
@@ -47,9 +49,10 @@ interface IHighlightData {
 }
 
 const Dashboard: React.FC = () => {
-  const dataKey = '@gofinances:transactions';
-
   const theme = useTheme();
+  const { user, signOut } = useAuth();
+
+  const dataKey = `@gofinances:transactions_user:${user.id}`;
 
   const [isLoading, setIsLoading] = useState(true);
   const [transactions, setTransactions] = useState<ITransactionCardProps[]>([]);
@@ -59,12 +62,20 @@ const Dashboard: React.FC = () => {
 
   const getLastTransactionDate = useCallback(
     (collection: ITransactionCardProps[], type: 'positive' | 'negative') => {
+      const collectionFiltered = collection.filter(
+        transaction => transaction.type === type,
+      );
+
+      if (collectionFiltered.length === 0) {
+        return 0;
+      }
+
       const lastTransactions = new Date(
         Math.max.apply(
           Math,
-          collection
-            .filter(transaction => transaction.type === type)
-            .map(transaction => new Date(transaction.date).getTime()),
+          collectionFiltered.map(transaction =>
+            new Date(transaction.date).getTime(),
+          ),
         ),
       );
 
@@ -125,7 +136,10 @@ const Dashboard: React.FC = () => {
         transactionsResponse,
         'negative',
       );
-      const totalInterval = `01 à ${lastTransactionEntries}`;
+      const totalInterval =
+        lastTransactionExpensive === 0
+          ? 'Não há transações'
+          : `01 à ${lastTransactionExpensive}`;
 
       const total = entriesSum - expensiveSum;
 
@@ -135,14 +149,20 @@ const Dashboard: React.FC = () => {
             style: 'currency',
             currency: 'BRL',
           }),
-          lastTransaction: `Última entrada dia ${lastTransactionEntries}`,
+          lastTransaction:
+            lastTransactionEntries === 0
+              ? 'Não há transações'
+              : `Última entrada dia ${lastTransactionEntries}`,
         },
         expensive: {
           amount: expensiveSum.toLocaleString('pt-BR', {
             style: 'currency',
             currency: 'BRL',
           }),
-          lastTransaction: `Última saída dia ${lastTransactionExpensive}`,
+          lastTransaction:
+            lastTransactionExpensive === 0
+              ? 'Não há transações'
+              : `Última saída dia ${lastTransactionExpensive}`,
         },
         total: {
           amount: total.toLocaleString('pt-BR', {
@@ -157,7 +177,7 @@ const Dashboard: React.FC = () => {
     } catch (error) {
       Alert.alert('Não foi possível carregar os dados');
     }
-  }, [getLastTransactionDate]);
+  }, [getLastTransactionDate, dataKey]);
 
   useEffect(() => {
     loadTransactions();
@@ -182,17 +202,17 @@ const Dashboard: React.FC = () => {
               <UserInfo>
                 <Photo
                   source={{
-                    uri: 'https://avatars.githubusercontent.com/u/66881343?v=4',
+                    uri: user.photo,
                   }}
                 />
 
                 <User>
                   <UserGreeting>Olá,</UserGreeting>
-                  <UserName>Lubni</UserName>
+                  <UserName>{user.name}</UserName>
                 </User>
               </UserInfo>
 
-              <LogoutButton>
+              <LogoutButton onPress={signOut}>
                 <Icon name="power" />
               </LogoutButton>
             </UserWrapper>

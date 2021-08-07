@@ -19,7 +19,8 @@ import theme from './src/global/styles/theme';
 
 import { AuthProvider } from './src/hooks/auth';
 
-import { AppRoutes } from './src/routes/app.routes';
+import { AuthRoutes } from './src/routes/auth.routes';
+import { Routes } from './src/routes';
 
 import { SignIn } from './src/screens/SignIn';
 
@@ -43,7 +44,7 @@ const App: React.FC = () => {
       />
       <NavigationContainer>
         <AuthProvider>
-          <SignIn />
+          <Routes />
         </AuthProvider>
       </NavigationContainer>
     </ThemeProvider>
