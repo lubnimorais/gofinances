@@ -22,7 +22,7 @@ import LogoSvg from '../../assets/logo.svg';
 import { SignInSocialButton } from '../../components/SignInSocialButton';
 
 const SignIn: React.FC = () => {
-  const { signInWithGoogle } = useAuth();
+  const { signInWithGoogle, signInWithApple } = useAuth();
 
   const handleSignInWithGoogle = useCallback(async () => {
     try {
@@ -31,6 +31,14 @@ const SignIn: React.FC = () => {
       Alert.alert('Não foi possível conectar a conta Google');
     }
   }, [signInWithGoogle]);
+
+  const handleSignInWithApple = useCallback(async () => {
+    try {
+      await signInWithApple();
+    } catch (error) {
+      Alert.alert('Não foi possível conectar a conta Apple');
+    }
+  }, [signInWithApple]);
 
   return (
     <Container>
@@ -54,7 +62,11 @@ const SignIn: React.FC = () => {
             onPress={handleSignInWithGoogle}
           />
 
-          <SignInSocialButton title="Entrar com Apple" svg={AppleSvg} />
+          <SignInSocialButton
+            title="Entrar com Apple"
+            svg={AppleSvg}
+            onPress={handleSignInWithApple}
+          />
         </FooterWrapper>
       </Footer>
     </Container>

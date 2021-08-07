@@ -1,6 +1,8 @@
 import React, { createContext, useContext, useCallback, useState } from 'react';
 
 import * as AuthSession from 'expo-auth-session';
+import * as AppleAuthentication from 'expo-apple-authentication';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const { CLIENT_ID } = process.env;
 const { REDIRECT_URI } = process.env;
@@ -29,6 +31,7 @@ interface IUserInfoGoogle {
 interface IAuthContextData {
   user: IUser;
   signInWithGoogle(): Promise<void>;
+  signInWithApple(): Promise<void>;
 }
 
 const AuthContext = createContext<IAuthContextData>({} as IAuthContextData);
@@ -54,15 +57,51 @@ const AuthProvider: React.FC = ({ children }) => {
 
         const userInfo = (await response.json()) as IUserInfoGoogle;
 
-        setUser({
+        const userLogged = {
           id: userInfo.id,
           name: userInfo.given_name,
           email: userInfo.email,
           photo: userInfo.picture,
-        });
+        };
+
+        setUser(userLogged);
+        await AsyncStorage.setItem(
+          '@gofinances:user',
+          JSON.stringify(userLogged),
+        );
       }
     } catch (error) {
       console.log(error);
+      throw new Error(error);
+    }
+  }, []);
+
+  const signInWithApple = useCallback(async () => {
+    try {
+      const credential = await AppleAuthentication.signInAsync({
+        requestedScopes: [
+          AppleAuthentication.AppleAuthenticationScope.FULL_NAME,
+          AppleAuthentication.AppleAuthenticationScope.EMAIL,
+        ],
+      });
+
+      console.log(credential);
+
+      if (credential) {
+        const userLogged = {
+          id: credential.user,
+          name: credential.fullName!.givenName!,
+          email: credential.email!,
+          photo: undefined,
+        };
+
+        setUser(userLogged);
+        await AsyncStorage.setItem(
+          '@gofinances:user',
+          JSON.stringify(userLogged),
+        );
+      }
+    } catch (error) {
       throw new Error(error);
     }
   }, []);
@@ -72,6 +111,7 @@ const AuthProvider: React.FC = ({ children }) => {
       value={{
         user,
         signInWithGoogle,
+        signInWithApple,
       }}
     >
       {children}
