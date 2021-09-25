@@ -115,7 +115,7 @@ const Register: React.FC = () => {
         Alert.alert('Não foi possível salvar');
       }
     },
-    [category.key, transactionType, reset, navigation],
+    [category.key, transactionType, reset, navigation, user.id],
   );
 
   return (
