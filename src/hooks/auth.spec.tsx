@@ -22,7 +22,7 @@ describe('Auth hook', () => {
       },
     });
 
-    // Agora que temos o Token, vamos mockar a requisição ttp dos dados de profile do usuário.
+    // Agora que temos o Token, vamos mockar a requisição http dos dados de profile do usuário.
     fetchMock.mockResponseOnce(
       JSON.stringify({
         id: 'any_id',
@@ -40,8 +40,24 @@ describe('Auth hook', () => {
     await act(async () => await result.current.signInWithGoogle());
 
     // Você até pode usar esse console.log para visualizar os dados.
-    console.log('USER PROFILE =>', result.current.user);
+    // console.log('USER PROFILE =>', result.current.user);
 
     expect(result.current.user.email).toBe('lubni.morais@gmail.com');
   });
+
+  // it('user should not connect if cancel authentication with Google', async () => {
+  //   // Primeiro, nós precisamos do Token. Então, vamos Mockar a função de startAsync.
+  //   const googleMocked = mocked(startAsync as any);
+  //   googleMocked.mockReturnValueOnce({
+  //     type: 'cancel',
+  //   });
+
+  //   const { result } = renderHook(() => useAuth(), {
+  //     wrapper: AuthProvider,
+  //   });
+
+  //   await act(() => result.current.signInWithGoogle());
+
+  //   expect(result.current.user).not.toHaveProperty('id');
+  // });
 });

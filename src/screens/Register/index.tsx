@@ -160,6 +160,7 @@ const Register: React.FC = () => {
             </TransactionType>
 
             <CategorySelectButton
+              testID="button-category"
               title={category.name}
               activeOpacity={0.7}
               onPress={toggleSelectCategoryModal}
@@ -173,7 +174,7 @@ const Register: React.FC = () => {
           />
         </Form>
 
-        <Modal visible={categoryModalOpen}>
+        <Modal testID="modal-category" visible={categoryModalOpen}>
           <CategorySelect
             category={category}
             setCategory={setCategory}
