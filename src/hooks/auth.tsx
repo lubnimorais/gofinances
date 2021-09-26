@@ -83,7 +83,7 @@ const AuthProvider: React.FC = ({ children }) => {
         await AsyncStorage.setItem(userStorageKey, JSON.stringify(userLogged));
       }
     } catch (error) {
-      throw new Error(error);
+      throw new Error('');
     }
   }, []);
 
@@ -113,7 +113,7 @@ const AuthProvider: React.FC = ({ children }) => {
         await AsyncStorage.setItem(userStorageKey, JSON.stringify(userLogged));
       }
     } catch (error) {
-      throw new Error(error);
+      throw new Error('');
     }
   }, []);
 
