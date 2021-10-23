@@ -8,6 +8,7 @@ const StackNavigation = createStackNavigator();
 const AuthRoutes: React.FC = () => {
   return (
     <StackNavigation.Navigator headerMode="none">
+      {/* <StackNavigation.Screen name="Splash" component={Splash} /> */}
       <StackNavigation.Screen name="SignIn" component={SignIn} />
     </StackNavigation.Navigator>
   );
